@@ -58,13 +58,13 @@ FILE* mypopen(char* command, char* type){
                 return NULL;
             }
 
-            exit(0);
+            //exit(0);
         }
         else if((strcmp(type,"w"))==0){
             //read --> schreibe seite kann geschlossen werden
             close(fd[0]);
             //parent warten auf child
-            wait(pid);
+            //wait(pid);
 
             //############ --------------------------------------------- ##############
             //############ zum Testzweck, Ausgabe der eingelesenen Datei ##############
@@ -107,8 +107,15 @@ FILE* mypopen(char* command, char* type){
                 exit(EXIT_FAILURE);
             }
         }
-        if(execl("/bin/sh","sh","-c",command,NULL)==-1){
+        if(execl("/bin/sh","sh","-c",command,(char *)NULL)==-1){
+            printf("#execl");
             return NULL;
+        }
+        if((strcmp(type,"r"))==0){
+            close(STDOUT_FILENO);
+        }
+        else{
+            close(STDIN_FILENO);
         }
         //exit(0);
     }
